@@ -1,29 +1,62 @@
-import React from "react";
-
-// Importing Components for the Card Implementation:
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 
-// Importing the required Functions:
-import { unixTimeToHMS } from "../utils";
-import { KelvinToDegree } from "../utils";
+// Importing the required functions and style sheets.
+import { unixTimeToHMS, KelvinToDegree, windDirection } from "../utils";
+import './style.css';
+
 
 export default function WeatherCard({ data }) {
+  function CurrentTime() {
+    // Define the state to hold the current time
+    const [currentTime, setCurrentTime] = useState(getCurrentTime());
+
+    // Use useEffect to set up an interval that updates the time every second
+    useEffect(() => {
+      const intervalId = setInterval(() => {
+        setCurrentTime(getCurrentTime());
+      }, 1000);
+
+      // Clean up the interval on component unmount
+      return () => clearInterval(intervalId);
+    }, []);
+
+    // Function to get the current time in HH:MM:SS format
+    function getCurrentTime() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, "0");
+      const minutes = now.getMinutes().toString().padStart(2, "0");
+      if(hours >=12)
+        {
+          return `${hours%12}:${minutes} p.m`;
+        }
+      else
+      {
+        return `${hours}:${minutes} a.m`;
+      }
+      
+    }
+
+    return <span>{currentTime}</span>;
+  }
+
   return (
     <Card
-      className="mx-8 border-2 border-black"
+      className="mx-8 border-2 border-black weatherCard"
       sx={{ display: "flex", borderRadius: "1rem" }}
     >
       <CardMedia
+      className="weatherImage"
         component="img"
         sx={{ width: "25%", height: "25%", minWidth: 330, minHeight: 330 }}
         image="/animations/Rain.gif"
         alt="Current Weather Details"
       />
-      <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+      <Box className="cardContent" sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
         <CardContent sx={{ flex: "1 0 auto" }}>
           <div>
             <Typography
@@ -31,8 +64,8 @@ export default function WeatherCard({ data }) {
               component="div"
               variant="h4"
             >
-              Current Weather Forecast{" "}
-              <span className="pr-4 text-xl">
+              <span>Current Weather <span className="forecast">Forecast</span>{" "}</span>
+              <span className="pr-4 text-3xl initialTempShow">
                 Current Temp : {KelvinToDegree(data.main.temp)} &deg;C
               </span>
             </Typography>
@@ -43,43 +76,44 @@ export default function WeatherCard({ data }) {
               className="flex justify-between "
             >
               {data.name}
-              <span className="pr-4 text-xl text-black">
+              <span className="pr-4 text-xl text-black initialTempShow">
                 Feels Like : {KelvinToDegree(data.main.feels_like)} &deg;C
               </span>
             </Typography>
 
-            <Typography
-              component="div"
-            >
+            <Typography component="div">
+            <span className="pr-4 text-xl tempShow">
+                Current Temp : {KelvinToDegree(data.main.temp)} &deg;C
+              </span>
+              <span className="pr-4 text-xl text-black tempShow">
+                Feels Like : {KelvinToDegree(data.main.feels_like)} &deg;C
+              </span>
               <span className="text-xl">Status: {data.weather[0].main} </span>
             </Typography>
-            
+            <Typography component="div">
+              <span className="text-xl mr-20">
+                Sunrise: {unixTimeToHMS(data.sys.sunrise)} a.m{" "}
+              </span>
+              <span className="text-xl">
+                Sunset: {unixTimeToHMS(data.sys.sunset)} p.m{" "}
+              </span>
+            </Typography>
+            <Typography component="div">
+              <span className="text-xl mr-6 pr-1">
+                Windspeed: {(data.wind.speed * 3.6).toFixed(2)} km/hr{" "}
+              </span>
+              <span className="text-xl">
+                Direction: {windDirection(data.wind.deg)}
+              </span>
+            </Typography>
+            <Typography component="div">
+              <span className="text-xl mr-8">
+                Current Time: <CurrentTime /> {" "}
+              </span>
+            </Typography>
           </div>
         </CardContent>
       </Box>
     </Card>
-
-    // <div className="flex justify-center items-center mt-8">
-    //   <Card className="border-2 border-black" sx={{ minWidth: 270, width: "28%", borderRadius:"1rem", }}>
-    //     <CardActionArea>
-    //       <CardMedia
-    //         component="img"
-    //         height="140"
-    //         image="/animations/Rain.gif"
-    //         alt="current Weather Condition"
-    //         className="rounded-full"
-    //       />
-    //       <CardContent>
-    //         <Typography gutterBottom variant="h5" component="div">
-    //           Current Weather
-    //         </Typography>
-    //         <Typography variant="body2" color="text.secondary">
-    //           Lizards are a widespread group of squamate reptiles, with over
-    //           6,000 species, ranging across all continents except Antarctica
-    //         </Typography>
-    //       </CardContent>
-    //     </CardActionArea>
-    //   </Card>
-    // </div>
   );
 }

@@ -1,0 +1,41 @@
+.tempShow
+{
+    display: none;
+}
+
+@media (max-width:1280px)
+{
+    .forecast
+    {
+        display:none;
+    }
+}
+
+@media(max-width:1200px)
+{
+    .weatherCard
+    {
+        display:block !important;
+        width:50%;
+        margin: auto;
+        min-width: 360px;
+    }
+    .tempShow
+    {
+        display:block !important;
+    }
+    .initialTempShow
+    {
+        display:none;
+    }
+
+    
+}
+
+@media (max-width:800px)
+{
+    .cardContent
+    {
+        display: block !important;
+    }
+}

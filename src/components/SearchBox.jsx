@@ -11,7 +11,7 @@ import WeatherCard from "./weatherCard";
 
 export default function SearchBox() {
   let [city, setCity] = useState("");
-  // let [CitySearched, setCitySearched] = useState(false);
+  let [CitySearched, setCitySearched] = useState(false);
   let [weather, setWeather] = useState({
     main: {
       temp: "",
@@ -27,6 +27,9 @@ export default function SearchBox() {
         main: "",
       },
     ],
+    wind: {
+      speed:"",
+    }
   });
 
   let URL = "http://api.openweathermap.org/geo/1.0/direct"; // URL of the geoCoordinates API
@@ -35,7 +38,6 @@ export default function SearchBox() {
   let WeatherURL = "https://api.openweathermap.org/data/2.5/"; // URL of the Weather API
 
   let getGeoCoordinates = async () => {
-    setCitySearched(true);
     let response = await fetch(`${URL}?q=${city}&appid=${API_KEY}`);
     let JsonResponse = await response.json();
     return JsonResponse;
@@ -46,6 +48,7 @@ export default function SearchBox() {
       `${WeatherURL}weather?lat=${lat}&lon=${lng}&appid=${API_KEY}`
     );
     let jsonResponse = await currWeather.json();
+    setCitySearched(true);
     return jsonResponse;
   };
 
@@ -59,7 +62,7 @@ export default function SearchBox() {
     let finalData = await getWeatherInfo(latitude, longitude);
     console.log(finalData.weather);
     console.log(finalData);
-    // setWeather(finalData);
+    setWeather(finalData);
   };
 
   let handleOnChange = (event) => {
@@ -84,8 +87,7 @@ export default function SearchBox() {
           label="City"
           variant="outlined"
           className="w-4/12 relative left-8"
-          sx={{ minWidth: 250 }}
-          // name="city"
+          sx={{ minWidth: 340 }}
           value={city}
           onChange={handleOnChange}
         />
