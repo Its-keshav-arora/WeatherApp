@@ -66,7 +66,7 @@ export default function WeatherCard({ data }) {
             >
               <span>Current Weather <span className="forecast">Forecast</span>{" "}</span>
               <span className="pr-4 text-3xl initialTempShow">
-                Current Temp : {KelvinToDegree(data.main.temp)} &deg;C
+                Current Temp : {(KelvinToDegree(data.main.temp) - 1.23).toFixed(2)} &deg;C
               </span>
             </Typography>
             <Typography
@@ -77,7 +77,7 @@ export default function WeatherCard({ data }) {
             >
               {data.name}
               <span className="pr-4 text-xl text-black initialTempShow">
-                Feels Like : {KelvinToDegree(data.main.feels_like)} &deg;C
+                Feels Like : {(KelvinToDegree(data.main.feels_like + 1.62))} &deg;C
               </span>
             </Typography>
 
@@ -90,7 +90,7 @@ export default function WeatherCard({ data }) {
               </span>
               <span className="text-xl">Status: {data.weather[0].main} </span>
             </Typography>
-            <Typography component="div">
+            <Typography component="div" className="SunRiseDiv">
               <span className="text-xl mr-20">
                 Sunrise: {unixTimeToHMS(data.sys.sunrise)} a.m{" "}
               </span>
@@ -98,7 +98,7 @@ export default function WeatherCard({ data }) {
                 Sunset: {unixTimeToHMS(data.sys.sunset)} p.m{" "}
               </span>
             </Typography>
-            <Typography component="div">
+            <Typography component="div" className="SunRiseDiv">
               <span className="text-xl mr-6 pr-1">
                 Windspeed: {(data.wind.speed * 3.6).toFixed(2)} km/hr{" "}
               </span>
