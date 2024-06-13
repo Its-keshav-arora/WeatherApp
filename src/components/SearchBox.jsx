@@ -36,7 +36,7 @@ export default function SearchBox({ apikey }) {
     },
   });
 
-  const URL = "http://api.openweathermap.org/geo/1.0/direct"; // URL of the geoCoordinates API
+  const URL = "https://api.openweathermap.org/geo/1.0/direct"; // URL of the geoCoordinates API
   const API_KEY = apikey;// API key of geoCoordinates API
 
   const WeatherURL = "https://api.openweathermap.org/data/2.5/"; // URL of the Weather API
