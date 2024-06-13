@@ -13,7 +13,6 @@ import WeatherCard from "./weatherCard";
 import Error from "./Error";
 
 export default function SearchBox({ apikey }) {
-  // console.log(apikey);
   const [city, setCity] = useState("");
   const [CitySearched, setCitySearched] = useState(false);
   const [cityNotFound, setCityNotFound] = useState(false);
@@ -71,7 +70,6 @@ export default function SearchBox({ apikey }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(city);
     setCity("");
     let geoCoordinates = await getGeoCoordinates(); // Extract the geo coordinates from the city.
     if (geoCoordinates && geoCoordinates.length > 0) {
@@ -79,18 +77,16 @@ export default function SearchBox({ apikey }) {
       let longitude = geoCoordinates[0].lon; // Longitude of the city.
       let finalData = await getWeatherInfo(latitude, longitude);
       if (finalData) {
-        console.log(finalData.weather);
-        console.log(finalData);
         setWeather(finalData);
         setCitySearched(true); 
         setCityNotFound(false);
       } else {
-        console.error('No weather data found');
+        // console.error('No weather data found');
         setCitySearched(false);
         setCityNotFound(true);
       }
     } else {
-      console.error('No geo coordinates found');
+      // console.error('No geo coordinates found');
       setCitySearched(false);
       setCityNotFound(true)
     }

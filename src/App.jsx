@@ -5,8 +5,6 @@ import SearchBox from "./components/SearchBox"
 function App() {
 
   const API_KEY = import.meta.env.VITE_APP_API_KEY;
-  console.log(API_KEY);
-  console.log( import.meta.env);
 
   return (
     <div>
