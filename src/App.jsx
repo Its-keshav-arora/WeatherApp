@@ -4,8 +4,9 @@ import SearchBox from "./components/SearchBox"
 
 function App() {
 
-  const API_KEY = process.env.REACT_APP_API_KEY;
-  console.log(process.env.REACT_APP_API_KEY);
+  const API_KEY = import.meta.env.VITE_APP_API_KEY;
+  console.log(API_KEY);
+  console.log( import.meta.env);
 
   return (
     <div>
