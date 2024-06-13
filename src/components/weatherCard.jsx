@@ -6,7 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 
 // Importing the required functions and style sheets.
-import { unixTimeToHMS, KelvinToDegree, windDirection } from "../utils";
+import { unixTimeToHMS, KelvinToDegree, windDirection, weatherImage } from "../utils";
 import './style.css';
 
 
@@ -52,8 +52,8 @@ export default function WeatherCard({ data }) {
       <CardMedia
       className="weatherImage"
         component="img"
-        sx={{ width: "25%", height: "25%", minWidth: 330, minHeight: 330 }}
-        image="/animations/Rain.gif"
+        sx={{ width: "25%", height: "25%", minWidth: 330, minHeight: 330, paddingLeft:"2rem" }}
+        image={weatherImage(data.weather[0].main)}
         alt="Current Weather Details"
       />
       <Box className="cardContent" sx={{ display: "flex", flexDirection: "column", width: "100%" }}>

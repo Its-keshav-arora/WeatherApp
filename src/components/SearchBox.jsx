@@ -9,10 +9,14 @@ import IconButton from "@mui/material/IconButton";
 // Importing the weather card
 import WeatherCard from "./weatherCard";
 
+// importing the Error Page
+import Error from "./Error";
+
 export default function SearchBox() {
-  let [city, setCity] = useState("");
-  let [CitySearched, setCitySearched] = useState(false);
-  let [weather, setWeather] = useState({
+  const [city, setCity] = useState("");
+  const [CitySearched, setCitySearched] = useState(false);
+  const [cityNotFound, setCityNotFound] = useState(false);
+  const [weather, setWeather] = useState({
     main: {
       temp: "",
       feels_like: "",
@@ -28,44 +32,70 @@ export default function SearchBox() {
       },
     ],
     wind: {
-      speed:"",
-    }
+      speed: "",
+    },
   });
 
-  let URL = "http://api.openweathermap.org/geo/1.0/direct"; // URL of the geoCoordinates API
-  let API_KEY = "0e32daf1c63f166b160aef66bb63af51"; // API key of geoCoordinates API
+  const URL = "http://api.openweathermap.org/geo/1.0/direct"; // URL of the geoCoordinates API
+  const API_KEY = "0e32daf1c63f166b160aef66bb63af51"; // API key of geoCoordinates API
 
-  let WeatherURL = "https://api.openweathermap.org/data/2.5/"; // URL of the Weather API
+  const WeatherURL = "https://api.openweathermap.org/data/2.5/"; // URL of the Weather API
 
-  let getGeoCoordinates = async () => {
-    let response = await fetch(`${URL}?q=${city}&appid=${API_KEY}`);
-    let JsonResponse = await response.json();
-    return JsonResponse;
+  const getGeoCoordinates = async () => {
+    try {
+      let response = await fetch(`${URL}?q=${city}&appid=${API_KEY}`);
+      if (!response.ok) {
+        throw new Error("City not found");
+      }
+      let JsonResponse = await response.json();
+      return JsonResponse;
+    } catch (error) {
+      console.error('Error fetching geo coordinates:', error);
+      return null; // Return null in case of error
+    }
   };
 
-  let getWeatherInfo = async (lat, lng) => {
-    let currWeather = await fetch(
-      `${WeatherURL}weather?lat=${lat}&lon=${lng}&appid=${API_KEY}`
-    );
-    let jsonResponse = await currWeather.json();
-    setCitySearched(true);
-    return jsonResponse;
+  const getWeatherInfo = async (lat, lng) => {
+    try {
+      let currWeather = await fetch(
+        `${WeatherURL}weather?lat=${lat}&lon=${lng}&appid=${API_KEY}`
+      );
+      let jsonResponse = await currWeather.json();
+      return jsonResponse;
+    } catch (error) {
+      console.error('Error fetching weather info:', error);
+      return null; // Return null in case of error
+    }
   };
 
-  let handleSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(city);
     setCity("");
-    let geoCoordinates = await getGeoCoordinates(); // Extracted the geo coordinates from City.
-    let latitude = geoCoordinates[0].lat; // Latitude of the city.
-    let longitude = geoCoordinates[0].lon; // longitude of the city.
-    let finalData = await getWeatherInfo(latitude, longitude);
-    console.log(finalData.weather);
-    console.log(finalData);
-    setWeather(finalData);
+    let geoCoordinates = await getGeoCoordinates(); // Extract the geo coordinates from the city.
+    if (geoCoordinates && geoCoordinates.length > 0) {
+      let latitude = geoCoordinates[0].lat; // Latitude of the city.
+      let longitude = geoCoordinates[0].lon; // Longitude of the city.
+      let finalData = await getWeatherInfo(latitude, longitude);
+      if (finalData) {
+        console.log(finalData.weather);
+        console.log(finalData);
+        setWeather(finalData);
+        setCitySearched(true); 
+        setCityNotFound(false);
+      } else {
+        console.error('No weather data found');
+        setCitySearched(false);
+        setCityNotFound(true);
+      }
+    } else {
+      console.error('No geo coordinates found');
+      setCitySearched(false);
+      setCityNotFound(true)
+    }
   };
 
-  let handleOnChange = (event) => {
+  const handleOnChange = (event) => {
     setCity(event.target.value);
   };
 
@@ -101,6 +131,7 @@ export default function SearchBox() {
       </Box>
 
       {CitySearched && <WeatherCard data={weather}></WeatherCard>}
+      {cityNotFound && <Error></Error>}
     </>
   );
 }

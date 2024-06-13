@@ -50,9 +50,30 @@ function windDirection(degrees) {
     return direction;
 }
 
+function weatherImage(status)
+{
+    switch (status) {
+        case "Rain":
+            return "/animations/Rain.gif";
+        case "Clear":
+            return "/animations/clear.gif"
+        case "Clouds":
+            return "/animations/Clouds.gif"
+        case "Haze":
+            return "/animations/Haze.gif"
+        case "Snow":
+            return "/animations/Snow.gif";
+        default:
+            return "/animations/Default.gif";
+    }
+}
+
+
+
 
 
 export { unixTimeToHMS };
 export { KelvinToDegree };
 export {windDirection};
+export {weatherImage};
 
