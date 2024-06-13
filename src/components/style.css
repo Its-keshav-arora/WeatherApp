@@ -10,8 +10,7 @@
 @media (max-width: 1200px) {
   .weatherCard {
     display: block !important;
-    width: 50%;
-    margin: auto;
+    width:50%;
     min-width: 360px;
   }
   .tempShow {

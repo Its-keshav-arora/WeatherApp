@@ -45,14 +45,15 @@ export default function WeatherCard({ data }) {
   }
 
   return (
+    <div className="flex justify-center items-center">
     <Card
-      className="mx-8 border-2 border-black weatherCard"
+      className="mx-8 border-2 border-black weatherCard w-full"
       sx={{ display: "flex", borderRadius: "1rem" }}
     >
       <CardMedia
       className="weatherImage"
         component="img"
-        sx={{ width: "25%", height: "25%", minWidth: 330, minHeight: 330, paddingLeft:"2rem" }}
+        sx={{ width: "25%", height: "25%", minWidth: 330, minHeight: 330}}
         image={weatherImage(data.weather[0].main)}
         alt="Current Weather Details"
       />
@@ -65,7 +66,7 @@ export default function WeatherCard({ data }) {
               variant="h4"
             >
               <span>Current Weather <span className="forecast">Forecast</span>{" "}</span>
-              <span className="pr-4 text-3xl initialTempShow">
+              <span className="text-3xl initialTempShow">
                 Current Temp : {(KelvinToDegree(data.main.temp) - 1.23).toFixed(2)} &deg;C
               </span>
             </Typography>
@@ -115,5 +116,6 @@ export default function WeatherCard({ data }) {
         </CardContent>
       </Box>
     </Card>
+    </div>
   );
 }
